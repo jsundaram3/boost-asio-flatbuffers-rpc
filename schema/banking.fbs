@@ -1,0 +1,19 @@
+namespace banking;
+
+table Account {
+  account_id:string;
+  owner:string;
+  balance:double;
+}
+
+table GetAccountRequest {
+  account_id:string;
+}
+
+table GetAccountResponse {
+  account:Account;
+}
+
+rpc_service BankingService {
+  GetAccount(GetAccountRequest):GetAccountResponse;
+}

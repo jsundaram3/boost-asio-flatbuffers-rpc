@@ -1,0 +1,197 @@
+#pragma once
+#include <string>
+#include <vector>
+#include <unordered_map>
+#include <unordered_set>
+#include <fstream>
+#include <iostream>
+#include <type_traits>
+#include <optional>
+#include <map>
+// ---------------------- FieldInfo ----------------------
+struct FieldInfo {
+    std::string name;
+    std::string type;
+};
+
+// ---------------------- Type Traits ----------------------
+template<typename T> struct is_vector : std::false_type {};
+template<typename T, typename A> struct is_vector<std::vector<T,A>> : std::true_type {};
+
+template<typename T> struct is_array : std::false_type {};
+template<typename T, size_t N> struct is_array<std::array<T,N>> : std::true_type {};
+
+template<typename T> struct is_optional : std::false_type {};
+template<typename T> struct is_optional<std::optional<T>> : std::true_type {};
+
+template<typename T> struct is_map : std::false_type {};
+template<typename K, typename V, typename C, typename A> struct is_map<std::map<K,V,C,A>> : std::true_type {};
+
+// ---------------------- Type Mapping ----------------------
+template<typename T, typename Enable = void>
+struct FBType
+{
+    static std::string name()
+    {
+        if constexpr(std::is_enum_v<T>)
+        {
+            // fallback if enum not registered yet
+            return typeid(T).name();
+        }
+        else
+        {
+            return T::fbs_name();
+        }
+    }
+};
+
+
+// Primitive types
+template<> struct FBType<int> { static std::string name(){ return "int"; } };
+template<> struct FBType<float> { static std::string name(){ return "float"; } };
+template<> struct FBType<double> { static std::string name(){ return "double"; } };
+template<> struct FBType<bool> { static std::string name(){ return "bool"; } };
+template<> struct FBType<std::string> { static std::string name(){ return "string"; } };
+
+// std::vector
+template<typename T> struct FBType<std::vector<T>> { static std::string name(){ return "[" + FBType<T>::name() + "]"; } };
+
+// std::array
+template<typename T, size_t N> struct FBType<std::array<T,N>> { static std::string name(){ return "[" + FBType<T>::name() + "]"; } };
+
+// std::optional
+template<typename T> struct FBType<std::optional<T>> { static std::string name(){ return FBType<T>::name(); } };
+
+// std::map -> Pair table
+template<typename K, typename V>
+struct FBType<std::map<K,V>>
+{
+    static std::string name()
+    {
+        std::string pair_name = FBType<K>::name() + FBType<V>::name() + "Pair";
+        auto &pairs = EntityRegistry::get_map_pairs();
+        auto it = std::find_if(pairs.begin(), pairs.end(),
+            [&](const MapPairInfo &p){ return p.name == pair_name; });
+        if(it == pairs.end()) pairs.push_back({pair_name, FBType<K>::name(), FBType<V>::name()});
+        return "[" + pair_name + "]";
+    }
+};
+
+template<typename K, typename V>
+struct FBType<std::unordered_map<K,V>>
+{
+    static std::string name()
+    {
+        std::string pair_name = FBType<K>::name() + FBType<V>::name() + "Pair";
+
+        auto &pairs = EntityRegistry::get_map_pairs();
+        auto it = std::find_if(pairs.begin(), pairs.end(),
+            [&](const MapPairInfo &p){ return p.name == pair_name; });
+        if(it == pairs.end()) pairs.push_back({pair_name, FBType<K>::name(), FBType<V>::name()});
+
+        return "[" + pair_name + "]";
+    }
+};
+
+#define FB_FIELD(member) FieldInfo{#member, FBType<decltype(member)>::name()}
+// ---------------------- Enum Info ----------------------
+struct EnumInfo
+{
+    std::string name;
+    std::vector<std::pair<std::string,int>> values;
+};
+// ---------------------- Map Pair Info ----------------------
+struct MapPairInfo
+{
+    std::string name;
+    std::string key_type;
+    std::string value_type;
+};
+
+// ---------------------- Reflection Registry ----------------------
+struct EntityRegistry {
+    using FieldsVec = std::vector<FieldInfo>;
+    static std::unordered_map<std::string, FieldsVec>& entity_fields() {
+        static std::unordered_map<std::string, FieldsVec> map;
+        return map;
+    }
+
+    static std::vector<EnumInfo>& get_enums()
+    {
+        static std::vector<EnumInfo> instance;
+        return instance;
+    }
+    static std::vector<MapPairInfo>& get_map_pairs()
+    {
+        static std::vector<MapPairInfo> instance;
+        return instance;
+    }
+};
+
+// ---------------------- Macros ----------------------
+#define REGISTER_FIELDS(...) \
+    static std::vector<FieldInfo> get_fields() { return { __VA_ARGS__ }; }
+
+#define REGISTER_ENTITY(Type) \
+namespace { \
+    struct Type##Registry { \
+        Type##Registry() { \
+            EntityRegistry::entity_fields()[#Type] = Type::get_fields(); \
+        } \
+    }; \
+    static Type##Registry global_##Type##_registry; \
+}
+// ---------------------- Enum Registration ----------------------
+#define REGISTER_ENUM(EnumType, ...) \
+namespace { \
+struct EnumType##_Registry { \
+    EnumType##_Registry(){ \
+        EntityRegistry::get_enums().push_back(EnumInfo{#EnumType, __VA_ARGS__}); \
+    } \
+}; \
+static EnumType##_Registry global_##EnumType##_registry; \
+}
+
+inline void generate_fbs_all(const std::string& output_dir = ".") {
+    for (auto& [entity_name, fields] : EntityRegistry::entity_fields()) {
+        std::string filename = output_dir + "/" + entity_name + ".fbs";
+        std::ofstream f(filename);
+        if (!f.is_open()) {
+            std::cerr << "Failed to write " << filename << "\n";
+            continue;
+        }
+
+        std::unordered_set<std::string> includes;
+
+        // First pass: detect includes for user-defined types
+        for (auto& field : fields) {
+            std::string type = field.type;
+            if (type != "int" && type != "float" && type != "double" &&
+                type != "bool" && type != "string" && type.front() != '[') {
+                includes.insert(type + ".fbs");
+            }
+            if (type.front() == '[') {
+                std::string inner = type.substr(1, type.size() - 2);
+                if (inner != "int" && inner != "float" && inner != "double" &&
+                    inner != "bool" && inner != "string") {
+                    includes.insert(inner + ".fbs");
+                }
+            }
+        }
+
+        // Write includes
+        for (auto& inc : includes) {
+            f << "#include \"" << inc << "\"\n";
+        }
+        if (!includes.empty()) f << "\n";
+
+        // Write table
+        f << "table " << entity_name << " {\n";
+        for (auto& field : fields) {
+            f << "  " << field.name << ": " << field.type << ";\n";
+        }
+        f << "}\n";
+
+        std::cout << "Generated " << filename << "\n";
+    }
+}

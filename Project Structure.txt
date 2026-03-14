@@ -1,0 +1,49 @@
+boost-asio-flatbuffers-rpc-windows/
+│
+├── CMakeLists.txt
+├── schema/
+│   └── banking.fbs
+├── generated/
+├── rpc/
+│   ├── rpc_header.h
+│   ├── rpc_client.h
+│   ├── rpc_server.h
+│   └── rpc_dispatcher.h
+├── client/
+│   ├── banking_client_stub.h
+│   └── main.cpp
+└── server/
+    ├── banking_service_impl.h
+    └── main.cpp
+
+
+
+
+6️⃣ Generate FlatBuffers Code
+
+Install FlatBuffers on Windows (via vcpkg or download flatc) and run:
+
+flatc --cpp schema/banking.fbs
+copy schema\banking_generated.h generated\
+
+
+boost-asio-flatbuffers-rpc/
+│
+├── CMakeLists.txt
+├── schema/
+│   └── banking.fbs
+├── generated/
+├── rpc/
+│   ├── rpc_header.h
+│   ├── rpc_client.h
+│   ├── rpc_server.h
+│   ├── rpc_session.h
+│   └── rpc_dispatcher.h
+├── stubs/
+│   ├── client_stub.h       # auto-generated
+│   ├── server_stub.h       # auto-generated
+│   └── rpc_method_ids.h    # auto-generated
+├── client/
+│   └── main.cpp
+└── server/
+    └── main.cpp

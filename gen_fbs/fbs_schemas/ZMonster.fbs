@@ -1,0 +1,7 @@
+table ZMonster {
+  name: string;
+  hp: int;
+  position: struct Vec3;
+  inventory: [int];
+  is_alive: bool;
+}

@@ -1,0 +1,4 @@
+table Player1 {
+  name: string;
+  score: int;
+}
