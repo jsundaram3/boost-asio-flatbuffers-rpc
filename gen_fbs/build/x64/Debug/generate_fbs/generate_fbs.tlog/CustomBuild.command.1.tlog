@@ -1,0 +1,36 @@
+^D:\BNP_PROJECTS\BOOST-ASIO-FLATBUFFERS-RPC\GEN_FBS\BUILD\CMAKEFILES\22C42F7E2EC90D9C1505CF182DA6FFE0\DUMMY.TXT.RULE
+setlocal
+cd D:\BNP_Projects\boost-asio-flatbuffers-rpc\gen_fbs
+if %errorlevel% neq 0 goto :cmEnd
+D:
+if %errorlevel% neq 0 goto :cmEnd
+"C:\Program Files\CMake\bin\cmake.exe" -E make_directory fbs_schemas
+if %errorlevel% neq 0 goto :cmEnd
+D:\BNP_Projects\boost-asio-flatbuffers-rpc\gen_fbs\build\generator\Debug\fbs_generator.exe
+if %errorlevel% neq 0 goto :cmEnd
+"C:\Program Files\CMake\bin\cmake.exe" -E touch fbs_schemas/dummy.txt
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal & call :cmErrorLevel %errorlevel% & goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
+^D:\BNP_PROJECTS\BOOST-ASIO-FLATBUFFERS-RPC\GEN_FBS\BUILD\CMAKEFILES\3C3ED8D2E09DD803D2F39510BC92177E\GENERATE_FBS.RULE
+setlocal
+:cmEnd
+endlocal & call :cmErrorLevel %errorlevel% & goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
+^D:\BNP_PROJECTS\BOOST-ASIO-FLATBUFFERS-RPC\GEN_FBS\CMAKELISTS.TXT
+setlocal
+"C:\Program Files\CMake\bin\cmake.exe" -SD:/BNP_Projects/boost-asio-flatbuffers-rpc/gen_fbs -BD:/BNP_Projects/boost-asio-flatbuffers-rpc/gen_fbs/build --check-stamp-file D:/BNP_Projects/boost-asio-flatbuffers-rpc/gen_fbs/build/CMakeFiles/generate.stamp
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal & call :cmErrorLevel %errorlevel% & goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd

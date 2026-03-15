@@ -19,10 +19,14 @@ struct Vec3Builder;
 struct Vec3 FLATBUFFERS_FINAL_CLASS : private ::flatbuffers::Table {
   typedef Vec3Builder Builder;
   enum FlatBuffersVTableOffset FLATBUFFERS_VTABLE_UNDERLYING_TYPE {
-    VT_X = 4,
-    VT_Y = 6,
-    VT_Z = 8
+    VT_NAME = 4,
+    VT_X = 6,
+    VT_Y = 8,
+    VT_Z = 10
   };
+  const ::flatbuffers::String *name() const {
+    return GetPointer<const ::flatbuffers::String *>(VT_NAME);
+  }
   float x() const {
     return GetField<float>(VT_X, 0.0f);
   }
@@ -35,6 +39,8 @@ struct Vec3 FLATBUFFERS_FINAL_CLASS : private ::flatbuffers::Table {
   template <bool B = false>
   bool Verify(::flatbuffers::VerifierTemplate<B> &verifier) const {
     return VerifyTableStart(verifier) &&
+           VerifyOffset(verifier, VT_NAME) &&
+           verifier.VerifyString(name()) &&
            VerifyField<float>(verifier, VT_X, 4) &&
            VerifyField<float>(verifier, VT_Y, 4) &&
            VerifyField<float>(verifier, VT_Z, 4) &&
@@ -46,6 +52,9 @@ struct Vec3Builder {
   typedef Vec3 Table;
   ::flatbuffers::FlatBufferBuilder &fbb_;
   ::flatbuffers::uoffset_t start_;
+  void add_name(::flatbuffers::Offset<::flatbuffers::String> name) {
+    fbb_.AddOffset(Vec3::VT_NAME, name);
+  }
   void add_x(float x) {
     fbb_.AddElement<float>(Vec3::VT_X, x, 0.0f);
   }
@@ -68,6 +77,7 @@ struct Vec3Builder {
 
 inline ::flatbuffers::Offset<Vec3> CreateVec3(
     ::flatbuffers::FlatBufferBuilder &_fbb,
+    ::flatbuffers::Offset<::flatbuffers::String> name = 0,
     float x = 0.0f,
     float y = 0.0f,
     float z = 0.0f) {
@@ -75,39 +85,23 @@ inline ::flatbuffers::Offset<Vec3> CreateVec3(
   builder_.add_z(z);
   builder_.add_y(y);
   builder_.add_x(x);
+  builder_.add_name(name);
   return builder_.Finish();
 }
 
-inline const Vec3 *GetVec3(const void *buf) {
-  return ::flatbuffers::GetRoot<Vec3>(buf);
-}
-
-inline const Vec3 *GetSizePrefixedVec3(const void *buf) {
-  return ::flatbuffers::GetSizePrefixedRoot<Vec3>(buf);
-}
-
-template <bool B = false>
-inline bool VerifyVec3Buffer(
-    ::flatbuffers::VerifierTemplate<B> &verifier) {
-  return verifier.template VerifyBuffer<Vec3>(nullptr);
-}
-
-template <bool B = false>
-inline bool VerifySizePrefixedVec3Buffer(
-    ::flatbuffers::VerifierTemplate<B> &verifier) {
-  return verifier.template VerifySizePrefixedBuffer<Vec3>(nullptr);
-}
-
-inline void FinishVec3Buffer(
-    ::flatbuffers::FlatBufferBuilder &fbb,
-    ::flatbuffers::Offset<Vec3> root) {
-  fbb.Finish(root);
-}
-
-inline void FinishSizePrefixedVec3Buffer(
-    ::flatbuffers::FlatBufferBuilder &fbb,
-    ::flatbuffers::Offset<Vec3> root) {
-  fbb.FinishSizePrefixed(root);
+inline ::flatbuffers::Offset<Vec3> CreateVec3Direct(
+    ::flatbuffers::FlatBufferBuilder &_fbb,
+    const char *name = nullptr,
+    float x = 0.0f,
+    float y = 0.0f,
+    float z = 0.0f) {
+  auto name__ = name ? _fbb.CreateString(name) : 0;
+  return CreateVec3(
+      _fbb,
+      name__,
+      x,
+      y,
+      z);
 }
 
 #endif  // FLATBUFFERS_GENERATED_VEC3_H_

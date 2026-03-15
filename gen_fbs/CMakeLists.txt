@@ -30,7 +30,7 @@ add_custom_target(generate_fbs ALL
 
 # Main executable
 add_executable(${PROJECT_NAME} src/main.cpp)
-add_dependencies(${PROJECT_NAME} generate_fbs)
+#add_dependencies(${PROJECT_NAME} generate_fbs)
 
 # Include FlatBuffers headers (assume you have it in flatbuffers/)
 set(FLAT_BUFFER_INSTALL_DIR "D:/BNP_Projects/flatbuffers")

@@ -1,0 +1,28 @@
+^D:\BNP_PROJECTS\BOOST-ASIO-FLATBUFFERS-RPC\GEN_FBS\BUILD\CMAKEFILES\53AD5E9543F16FE2103A259FD0520367\VEC3.H.RULE
+setlocal
+D:\BNP_Projects\flatbuffers\build\Release\flatc.exe --cpp -o D:/BNP_Projects/boost-asio-flatbuffers-rpc/gen_fbs/generated_flatbuffers D:/BNP_Projects/boost-asio-flatbuffers-rpc/gen_fbs/fbs_schemas/Vec3.fbs
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal & call :cmErrorLevel %errorlevel% & goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
+^D:\BNP_PROJECTS\BOOST-ASIO-FLATBUFFERS-RPC\GEN_FBS\BUILD\CMAKEFILES\3C3ED8D2E09DD803D2F39510BC92177E\GENERATE_FLATBUFFERS1.RULE
+setlocal
+:cmEnd
+endlocal & call :cmErrorLevel %errorlevel% & goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
+^D:\BNP_PROJECTS\BOOST-ASIO-FLATBUFFERS-RPC\GEN_FBS\CMAKELISTS.TXT
+setlocal
+"C:\Program Files\CMake\bin\cmake.exe" -SD:/BNP_Projects/boost-asio-flatbuffers-rpc/gen_fbs -BD:/BNP_Projects/boost-asio-flatbuffers-rpc/gen_fbs/build --check-stamp-file D:/BNP_Projects/boost-asio-flatbuffers-rpc/gen_fbs/build/CMakeFiles/generate.stamp
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal & call :cmErrorLevel %errorlevel% & goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd

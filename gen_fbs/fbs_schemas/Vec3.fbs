@@ -1,4 +1,5 @@
 table Vec3 {
+  name: string;
   x: float;
   y: float;
   z: float;

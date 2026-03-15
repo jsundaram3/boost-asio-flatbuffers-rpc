@@ -263,7 +263,7 @@ inline void generate_enums_fbs(const std::string& out_dir=".") {
 
 
 inline void generate_fbs_all(const std::string& out_dir=".") {
-    generate_enums_fbs(out_dir); // always first
+   // generate_enums_fbs(out_dir); // always first
 
     auto order = topological_sort_entities();
 

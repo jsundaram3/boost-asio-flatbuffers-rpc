@@ -1,0 +1,8 @@
+{
+	"InstallScripts" : 
+	[
+		"D:/BNP_Projects/boost-asio-flatbuffers-rpc/gen_fbs/build/cmake_install.cmake",
+		"D:/BNP_Projects/boost-asio-flatbuffers-rpc/gen_fbs/build/generator/cmake_install.cmake"
+	],
+	"Parallel" : false
+}

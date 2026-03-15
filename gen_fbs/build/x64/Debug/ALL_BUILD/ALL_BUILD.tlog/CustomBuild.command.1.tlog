@@ -1,0 +1,10 @@
+^D:\BNP_PROJECTS\BOOST-ASIO-FLATBUFFERS-RPC\GEN_FBS\CMAKELISTS.TXT
+setlocal
+"C:\Program Files\CMake\bin\cmake.exe" -SD:/BNP_Projects/boost-asio-flatbuffers-rpc/gen_fbs -BD:/BNP_Projects/boost-asio-flatbuffers-rpc/gen_fbs/build --check-stamp-file D:/BNP_Projects/boost-asio-flatbuffers-rpc/gen_fbs/build/CMakeFiles/generate.stamp
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal & call :cmErrorLevel %errorlevel% & goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd

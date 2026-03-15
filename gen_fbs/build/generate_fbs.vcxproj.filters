@@ -1,0 +1,20 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="17.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <CustomBuild Include="D:\BNP_Projects\boost-asio-flatbuffers-rpc\gen_fbs\build\CMakeFiles\22c42f7e2ec90d9c1505cf182da6ffe0\dummy.txt.rule">
+      <Filter>CMake Rules</Filter>
+    </CustomBuild>
+    <CustomBuild Include="D:\BNP_Projects\boost-asio-flatbuffers-rpc\gen_fbs\build\CMakeFiles\3c3ed8d2e09dd803d2f39510bc92177e\generate_fbs.rule">
+      <Filter>CMake Rules</Filter>
+    </CustomBuild>
+    <CustomBuild Include="D:\BNP_Projects\boost-asio-flatbuffers-rpc\gen_fbs\CMakeLists.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="D:\BNP_Projects\boost-asio-flatbuffers-rpc\gen_fbs\build\CMakeFiles\generate_fbs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="CMake Rules">
+      <UniqueIdentifier>{BA76B6CA-7238-3AA3-B8BE-E5D7EEF9ACDD}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>

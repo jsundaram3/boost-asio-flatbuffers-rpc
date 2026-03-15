@@ -1,3 +1,6 @@
+cmake -S . -B build -G "Visual Studio 17 2022"
+cmake --build build --config Release
+
 1) Install Dependencies:
 - Flat Buffer
 C:\Program Files (x86)\Microsoft Visual Studio\2022\BuildTools>cd /D "D:\BNP_Projects\flatbuffers"

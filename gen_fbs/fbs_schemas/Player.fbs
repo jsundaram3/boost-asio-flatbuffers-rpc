@@ -1,5 +1,0 @@
-table Player {
-  username: string;
-  level: int;
-  position: struct Vec3;
-}

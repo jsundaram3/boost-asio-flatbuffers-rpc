@@ -1,0 +1,16 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="17.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="D:\BNP_Projects\boost-asio-flatbuffers-rpc\gen_fbs\src\main.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <CustomBuild Include="D:\BNP_Projects\boost-asio-flatbuffers-rpc\gen_fbs\CMakeLists.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{C1CA44FB-1DB7-3F37-8FD5-0DA49CAE21AF}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>
